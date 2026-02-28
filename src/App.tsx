@@ -10,13 +10,13 @@ import { Volume2, VolumeX, ChevronRight, RotateCcw, Play } from 'lucide-react';
 // Configuration for the 8 pages
 const PAGES = Array.from({ length: 8 }, (_, i) => ({
   id: i + 1,
-  imageSrc: `assets/pages/page${i + 1}.jpeg`,
+  imageSrc: `assets/pages/page${i + 1}.jpg`,
   audioSrc: `assets/audio/page${i + 1}.wav`,
 }));
 
 export default function App() {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
-  const [hasStarted, setHasStarted] = useState(false);
+  const [hasStarted, setHasStarted] = useState(true);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [showNextButton, setShowNextButton] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -128,7 +128,7 @@ export default function App() {
       } else {
         // Switching to unmuted: stop timer and resume audio
         if (muteTimerRef.current) clearTimeout(muteTimerRef.current);
-        if (isAudioPlaying && hasStarted) {
+        if (isAudioPlaying) {
           audioRef.current.play().catch(() => {
             // If resume fails, just wait for the end
           });
@@ -137,29 +137,16 @@ export default function App() {
     }
   };
 
-  if (!hasStarted) {
-    return (
-      <div 
-        className="fixed inset-0 bg-neutral-950 flex items-center justify-center z-50 cursor-pointer group"
-        onClick={handleStart}
-      >
-        <div className="text-center space-y-6">
-          <motion.div 
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="w-24 h-24 bg-amber-500/10 border border-amber-500/30 rounded-full flex items-center justify-center mx-auto group-hover:bg-amber-500/20 transition-colors"
-          >
-            <Play className="w-10 h-10 text-amber-500 fill-amber-500" />
-          </motion.div>
-          <h1 className="text-amber-500 font-serif italic text-3xl tracking-wide">Tap to Start Portfolio</h1>
-          <p className="text-neutral-500 text-sm uppercase tracking-[0.2em]">Experience with Audio</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="fixed inset-0 bg-neutral-950 text-white overflow-hidden font-sans select-none">
+    <div 
+      className="fixed inset-0 bg-neutral-950 text-white overflow-hidden font-sans select-none"
+      onClick={() => {
+        // On first click anywhere, try to play audio if it's not already playing
+        if (audioRef.current && audioRef.current.paused && isAudioPlaying && !isMuted) {
+          audioRef.current.play().catch(() => {});
+        }
+      }}
+    >
       {/* Hidden Audio Element */}
       <audio 
         ref={audioRef}
