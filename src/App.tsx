@@ -10,8 +10,8 @@ import { Volume2, VolumeX, ChevronRight, RotateCcw, Play } from 'lucide-react';
 // Configuration for the 8 pages
 const PAGES = Array.from({ length: 8 }, (_, i) => ({
   id: i + 1,
-  imageSrc: `/assets/pages/page${i + 1}.jpeg`,
-  audioSrc: `/assets/audio/page${i + 1}.wav`,
+  imageSrc: `assets/pages/page${i + 1}.jpeg`,
+  audioSrc: `assets/audio/page${i + 1}.wav`,
 }));
 
 export default function App() {
